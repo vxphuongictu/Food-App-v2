@@ -1,0 +1,142 @@
+PODS:
+  - connectivity_plus (0.0.1):
+    - Flutter
+    - ReachabilitySwift
+  - Flutter (1.0.0)
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - open_mail_app (0.0.1):
+    - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - photo_manager (2.0.0):
+    - Flutter
+    - FlutterMacOS
+  - ReachabilitySwift (5.0.0)
+  - share_plus (0.0.1):
+    - Flutter
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - sqflite (0.0.2):
+    - Flutter
+    - FMDB (>= 2.7.5)
+  - Stripe (23.3.2):
+    - StripeApplePay (= 23.3.2)
+    - StripeCore (= 23.3.2)
+    - StripePayments (= 23.3.2)
+    - StripePaymentsUI (= 23.3.2)
+    - StripeUICore (= 23.3.2)
+  - stripe_ios (0.0.1):
+    - Flutter
+    - Stripe (~> 23.3.0)
+    - StripeApplePay (~> 23.3.0)
+    - StripeFinancialConnections (~> 23.3.0)
+    - StripePayments (~> 23.3.0)
+    - StripePaymentSheet (~> 23.3.0)
+    - StripePaymentsUI (~> 23.3.0)
+  - StripeApplePay (23.3.2):
+    - StripeCore (= 23.3.2)
+  - StripeCore (23.3.2)
+  - StripeFinancialConnections (23.3.2):
+    - StripeCore (= 23.3.2)
+    - StripeUICore (= 23.3.2)
+  - StripePayments (23.3.2):
+    - StripeCore (= 23.3.2)
+    - StripePayments/Stripe3DS2 (= 23.3.2)
+  - StripePayments/Stripe3DS2 (23.3.2):
+    - StripeCore (= 23.3.2)
+  - StripePaymentSheet (23.3.2):
+    - StripeApplePay (= 23.3.2)
+    - StripeCore (= 23.3.2)
+    - StripePayments (= 23.3.2)
+    - StripePaymentsUI (= 23.3.2)
+  - StripePaymentsUI (23.3.2):
+    - StripeCore (= 23.3.2)
+    - StripePayments (= 23.3.2)
+    - StripeUICore (= 23.3.2)
+  - StripeUICore (23.3.2):
+    - StripeCore (= 23.3.2)
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - video_player_avfoundation (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
+  - Flutter (from `Flutter`)
+  - open_mail_app (from `.symlinks/plugins/open_mail_app/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - photo_manager (from `.symlinks/plugins/photo_manager/ios`)
+  - share_plus (from `.symlinks/plugins/share_plus/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+  - video_player_avfoundation (from `.symlinks/plugins/video_player_avfoundation/ios`)
+
+SPEC REPOS:
+  trunk:
+    - FMDB
+    - ReachabilitySwift
+    - Stripe
+    - StripeApplePay
+    - StripeCore
+    - StripeFinancialConnections
+    - StripePayments
+    - StripePaymentSheet
+    - StripePaymentsUI
+    - StripeUICore
+
+EXTERNAL SOURCES:
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
+  Flutter:
+    :path: Flutter
+  open_mail_app:
+    :path: ".symlinks/plugins/open_mail_app/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/ios"
+  photo_manager:
+    :path: ".symlinks/plugins/photo_manager/ios"
+  share_plus:
+    :path: ".symlinks/plugins/share_plus/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  stripe_ios:
+    :path: ".symlinks/plugins/stripe_ios/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+  video_player_avfoundation:
+    :path: ".symlinks/plugins/video_player_avfoundation/ios"
+
+SPEC CHECKSUMS:
+  connectivity_plus: 413a8857dd5d9f1c399a39130850d02fe0feaf7e
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  open_mail_app: 794172f6a22cd16319d3ddaf45e945b2f74952b0
+  path_provider_foundation: 37748e03f12783f9de2cb2c4eadfaa25fe6d4852
+  photo_manager: 4f6810b7dfc4feb03b461ac1a70dacf91fba7604
+  ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
+  share_plus: 056a1e8ac890df3e33cb503afffaf1e9b4fbae68
+  shared_preferences_foundation: 297b3ebca31b34ec92be11acd7fb0ba932c822ca
+  sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+  Stripe: a11f72e054b581f16064d5b735e33a056f197c34
+  stripe_ios: f93762c5b513f456e82ac57cf7cab2aacc6ec7f7
+  StripeApplePay: e6267e960bee142c5140137c79f36639d96be2d2
+  StripeCore: e7a5ef22f15ca26f83a9d8f52e87c6767317a268
+  StripeFinancialConnections: f4530a4feddc2c2fdd378fd767a161f0fddbb258
+  StripePayments: e56a21a758f06cb6048aae711d60c135ac49eaf7
+  StripePaymentSheet: 55451afab0ad85cc4cda9aec26a62a5a5694c029
+  StripePaymentsUI: d3fa98cca974d6b29a331b7efe8c4803cdfe47de
+  StripeUICore: b8514392b8d679a1be9739198e2df4168f34c8a7
+  url_launcher_ios: fb12c43172927bb5cf75aeebd073f883801f1993
+  video_player_avfoundation: e489aac24ef5cf7af82702979ed16f2a5ef84cff
+
+PODFILE CHECKSUM: cc1f88378b4bfcf93a6ce00d2c587857c6008d3b
+
+COCOAPODS: 1.11.3
