@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/functions/authenticate/logout.dart';
 import 'package:food_e/functions/toColor.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/requests/changePassword.dart';
+import 'package:food_e/screens/welcome/AuthenticatedOptionsScreen.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyInput.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/core/SharedPreferencesClass.dart';
+import 'package:provider/provider.dart';
 
 
 class ChangePassword extends StatefulWidget
@@ -20,7 +24,6 @@ class ChangePassword extends StatefulWidget
 
 class _ChangePassword extends State<ChangePassword>
 {
-
   TextEditingController _oldPwd = TextEditingController();
   TextEditingController _newPwd = TextEditingController();
   TextEditingController _confirmPwd = TextEditingController();
@@ -41,38 +44,48 @@ class _ChangePassword extends State<ChangePassword>
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      appbarBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: cnf.colorBlack.toColor(),
-          size: cnf.leadingIconSize,
-        ),
-      ),
-      margin: true,
-      body: _screen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          appbarBgColor: cnf.colorWhite,
+          screenBgColor: cnf.colorWhite,
+          extendBodyBehindAppBar: false,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              size: cnf.leadingIconSize,
+            ),
+          ),
+          margin: true,
+          body: _screen(),
+        );
+      },
     );
   }
 
   Widget _screen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyTitle(
-            label: "CHANGE PASSWORD",
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitle(
+                label: "CHANGE PASSWORD",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+              ),
+              const Expanded(child: SizedBox()),
+              this.form_input(),
+              this.submit_button()
+            ],
           ),
-          const Expanded(child: SizedBox()),
-          this.form_input(),
-          this.submit_button()
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -117,7 +130,12 @@ class _ChangePassword extends State<ChangePassword>
           await changePassword(
               id: this._userID!,
               newPassword: this._newPwd.text,
-              confirmPassword: this._confirmPwd.text
+              confirmPassword: this._confirmPwd.text,
+          );
+          logout();
+          Future.delayed(
+            const Duration(seconds: 3),
+            () => Navigator.push(context, MaterialPageRoute(builder:  (context) => AuthenticatedOptionsScreen()))
           );
         },
         label: "CHANGE PASSWORD",

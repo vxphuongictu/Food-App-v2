@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:food_e/core/SharedPreferencesClass.dart';
 import 'package:food_e/functions/toColor.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/core/_config.dart' as cnf;
 import 'package:food_e/widgets/MyText.dart';
 import 'package:food_e/widgets/SwitchGroup.dart';
+import 'package:provider/provider.dart';
+
 
 class Settings extends StatefulWidget
 {
@@ -23,11 +26,9 @@ class _Settings extends State<Settings>
 
   /* functions */
   _changeMode(bool isOn) async {
-    setState(() {
-      this._darkModeSwitch = !this._darkModeSwitch;
-    });
-    await SharedPreferencesClass().set_dark_mode(option: isOn);
+    Provider.of<ThemeModeProvider>(context, listen: false).changeThemeMode(darkMode: isOn);
   }
+
   _changeEmailMarketing(bool isOn){
     setState(() {
       this._emailMarketingSwitch = !this._emailMarketingSwitch;
@@ -54,19 +55,24 @@ class _Settings extends State<Settings>
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      extendBodyBehindAppBar: false,
-      appbarBgColor: cnf.colorWhite,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: cnf.colorBlack.toColor(),
-        ),
-      ),
-      title: "Settings",
-      body: _screen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          extendBodyBehindAppBar: false,
+          appbarBgColor: cnf.colorWhite,
+          leading: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+            ),
+          ),
+          title: "Settings",
+          colorTitle: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+          body: _screen(),
+        );
+      },
     );
   }
 
@@ -97,7 +103,7 @@ class _Settings extends State<Settings>
         Container(
           height: 50.0,
           width: double.infinity,
-          color: cnf.colorWhite.toColor(),
+          color: (this._darkModeSwitch == true) ? cnf.colorLightGrayShadow.toColor() : cnf.colorWhite.toColor(),
           margin: const EdgeInsets.only(top: cnf.marginScreen, bottom: cnf.marginScreen),
           child: Padding(
             padding: const EdgeInsets.only(left: cnf.marginScreen, right: cnf.marginScreen),
@@ -130,7 +136,7 @@ class _Settings extends State<Settings>
         Container(
           height: 50.0,
           width: double.infinity,
-          color: cnf.colorWhite.toColor(),
+          color: (this._darkModeSwitch == true) ? cnf.colorLightGrayShadow.toColor() : cnf.colorWhite.toColor(),
           margin: const EdgeInsets.only(top: cnf.marginScreen, bottom: cnf.marginScreen),
           child: Padding(
             padding: const EdgeInsets.only(left: cnf.marginScreen, right: cnf.marginScreen),
@@ -163,7 +169,7 @@ class _Settings extends State<Settings>
         Container(
           height: 50.0,
           width: double.infinity,
-          color: cnf.colorWhite.toColor(),
+          color: (this._darkModeSwitch == true) ? cnf.colorLightGrayShadow.toColor() : cnf.colorWhite.toColor(),
           margin: const EdgeInsets.only(top: cnf.marginScreen, bottom: cnf.marginScreen),
           child: Padding(
             padding: const EdgeInsets.only(left: cnf.marginScreen, right: cnf.marginScreen),

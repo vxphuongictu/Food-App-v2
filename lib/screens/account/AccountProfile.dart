@@ -1,11 +1,15 @@
+import 'dart:math';
+
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_e/core/_config.dart' as cnf;
 import 'package:food_e/functions/toColor.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/requests/deleteUser.dart';
 import 'package:food_e/screens/authenticate/ChangePassword.dart';
+import 'package:food_e/screens/welcome/AuthenticatedOptionsScreen.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyInput.dart';
@@ -13,6 +17,8 @@ import 'package:food_e/widgets/MyText.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/requests/updateUser.dart';
 import 'package:food_e/core/SharedPreferencesClass.dart';
+import 'package:food_e/functions/authenticate/logout.dart';
+import 'package:provider/provider.dart';
 
 
 class AccountProfile extends StatefulWidget
@@ -45,40 +51,50 @@ class _AccountProfile extends State<AccountProfile>
   }
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      appbarBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: cnf.colorBlack.toColor(),
-          size: cnf.leadingIconSize,
-        ),
-      ),
-      margin: true,
-      body: _screen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          appbarBgColor: cnf.colorWhite,
+          extendBodyBehindAppBar: false,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              size: cnf.leadingIconSize,
+            ),
+          ),
+          margin: true,
+          screenBgColor: cnf.colorWhite,
+          body: _screen(),
+        );
+      },
     );
   }
 
   Widget _screen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyTitle(
-            label: "ACCOUNT AND PROFILE",
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitle(
+                label: "ACCOUNT AND PROFILE",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+              ),
+              this.delete_account(),
+              const Expanded(child: SizedBox()),
+              this.input_form(),
+              this.change_password(),
+              this.submit_btn()
+            ],
           ),
-          this.delete_account(),
-          const Expanded(child: SizedBox()),
-          this.input_form(),
-          this.change_password(),
-          this.submit_btn()
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -106,10 +122,18 @@ class _AccountProfile extends State<AccountProfile>
                 )) {
                   EasyLoading.show(status: "Deleting ...");
                   deleteUser(id: this._userID!).then((value) {
-                    Future.delayed(
-                      const Duration(seconds: 3),
-                      () => EasyLoading.dismiss(),
-                    );
+                    if (value['status'] == false) {
+                      EasyLoading.showError(value['message']);
+                    } else {
+                      EasyLoading.showSuccess("Done");
+                      Future.delayed(
+                        Duration(seconds: 2),
+                        () async {
+                          await logout();
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticatedOptionsScreen()));
+                        },
+                      );
+                    }
                   });
                 } else {
                   EasyLoading.showSuccess("Cancel");
@@ -163,36 +187,42 @@ class _AccountProfile extends State<AccountProfile>
 
   Widget change_password()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: cnf.wcLogoMarginTop),
-      child: GestureDetector(
-        onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ChangePassword())
-        ),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 20.0),
-              child: Icon(
-                FontAwesomeIcons.lock,
-                color: cnf.colorMainStreamBlue.toColor(),
-                size: 20.0,
-              )
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: cnf.wcLogoMarginTop),
+          child: GestureDetector(
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ChangePassword())
             ),
-            Expanded(
-              child: MyText(
-                text: "Change Password",
-                align: TextAlign.start,
-              ),
+            child: Row(
+              children: [
+                Padding(
+                    padding: const EdgeInsets.only(right: 20.0),
+                    child: Icon(
+                      FontAwesomeIcons.lock,
+                      color: cnf.colorMainStreamBlue.toColor(),
+                      size: 20.0,
+                    )
+                ),
+                Expanded(
+                  child: MyText(
+                    text: "Change Password",
+                    align: TextAlign.start,
+                    color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorLightGrayShadow,
+                  ),
+                ),
+                Icon(
+                  FontAwesomeIcons.angleRight,
+                  size: 20.0,
+                  color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorLightGrayShadow.toColor(),
+                )
+              ],
             ),
-            const Icon(
-              FontAwesomeIcons.angleRight,
-              size: 20.0,
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 
@@ -211,6 +241,8 @@ class _AccountProfile extends State<AccountProfile>
           ).then((value) {
             if (value['status'] == true) {
               EasyLoading.showSuccess("Completed!");
+              logout();
+              Navigator.push(context, MaterialPageRoute(builder: (context) => AuthenticatedOptionsScreen()));
             } else {
               EasyLoading.showError(value['message']);
             }

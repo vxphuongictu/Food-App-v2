@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_e/core/DatabaseManager.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyInput.dart';
@@ -11,6 +12,7 @@ import 'package:food_e/widgets/MyRichText.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/requests/login.dart';
 import 'package:food_e/core/SharedPreferencesClass.dart';
+import 'package:provider/provider.dart';
 
 
 class Login extends StatefulWidget
@@ -49,6 +51,7 @@ class _Login extends State<Login>
       this._visible = true;
     }));
   }
+
   void _login() async
   {
     if (this.email.text == "" || this.password.text == "") {
@@ -78,41 +81,51 @@ class _Login extends State<Login>
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      extendBodyBehindAppBar: false,
-      appbarBgColor: cnf.colorWhite,
-      disabledBodyHeight: true,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.close,
-          color: cnf.colorBlack.toColor(),
-        ),
-      ),
-      margin: true,
-      body: _loginScreen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          appbarBgColor: cnf.colorWhite,
+          extendBodyBehindAppBar: false,
+          screenBgColor: cnf.colorWhite,
+          disabledBodyHeight: true,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.close,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+            ),
+          ),
+          margin: true,
+          body: _loginScreen(),
+        );
+      },
     );
   }
 
   Widget _loginScreen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyTitle(
-            label: "LOGIN",
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitle(
+                label: "LOGIN",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+              ),
+              AnimatedOpacity(
+                opacity: this._visible ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 300),
+                child: Image.asset('assets/images/login.png'),
+              ),
+              this.registerForm()
+            ],
           ),
-          AnimatedOpacity(
-            opacity: this._visible ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 300),
-            child: Image.asset('assets/images/login.png'),
-          ),
-          this.registerForm()
-        ],
-      ),
+        );
+      },
     );
   }
 

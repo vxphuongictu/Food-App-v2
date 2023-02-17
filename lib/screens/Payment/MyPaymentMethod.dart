@@ -3,12 +3,15 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/screens/Payment/PaymentSetup.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyText.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/core/DatabaseManager.dart';
+import 'package:food_e/functions/card/replaceCardNumber.dart';
+import 'package:provider/provider.dart';
 
 
 class MyPaymentMethod extends StatefulWidget
@@ -35,95 +38,109 @@ class _MyPaymentMethod extends State<MyPaymentMethod> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      appbarBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      scroll: false,
-      disabledBodyHeight: true,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: cnf.colorBlack.toColor(),
-          size: cnf.leadingIconSize,
-        ),
-      ),
-      margin: true,
-      body: addressSetupScreen(context),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          appbarBgColor: cnf.colorWhite,
+          extendBodyBehindAppBar: false,
+          scroll: false,
+          screenBgColor: cnf.colorWhite,
+          disabledBodyHeight: true,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              size: cnf.leadingIconSize,
+            ),
+          ),
+          margin: true,
+          body: addressSetupScreen(context),
+        );
+      },
     );
   }
 
   Widget addressSetupScreen(context)
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: MyTitle(
-              label: "MY PAYMENT METHODS",
-            ),
-          ),
-          this.screen(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
-            child: LargeButton(
-              label: "ADD NEW PAYMENT METHOD",
-              onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => PaymentSetup(title: "ADD NEW CARD")
-                  )
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: MyTitle(
+                  label: "MY PAYMENT METHODS",
+                  color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                ),
               ),
-            ),
-          )
-        ],
-      ),
+              (this._listCard.length > 0) ? this.screen() : Container(
+                margin: const EdgeInsets.only(bottom: cnf.wcDistanceButtonAndText),
+                child: Image.asset("assets/images/no-payment.png"),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
+                child: LargeButton(
+                  label: "ADD NEW PAYMENT METHOD",
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => PaymentSetup(title: "ADD NEW CARD")
+                      )
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 
   Widget screen()
   {
     return ListView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: this._listCard.length,
-      itemBuilder: (context, index) => Slidable(
-        key: UniqueKey(),
-        endActionPane: ActionPane(
-          dismissible: DismissiblePane(
-            onDismissed: () {
-              EasyLoading.show(status: "Deleting ...");
-              DatabaseManager().removeItemInCard(id: this._listCard[index]['id']).then((value){
-                EasyLoading.showSuccess("Done");
-                setState(() {
-                  DatabaseManager().fetchCard().then((value) {
-                    this._listCard = value;
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: this._listCard.length,
+        itemBuilder: (context, index) => Slidable(
+            key: UniqueKey(),
+            endActionPane: ActionPane(
+              dismissible: DismissiblePane(
+                onDismissed: () {
+                  EasyLoading.show(status: "Deleting ...");
+                  DatabaseManager().removeItemInCard(id: this._listCard[index]['id']).then((value){
+                    EasyLoading.showSuccess("Done");
+                    setState(() {
+                      DatabaseManager().fetchCard().then((value) {
+                        this._listCard = value;
+                      });
+                    });
                   });
-                });
-              });
-            },
-          ),
-          motion: const ScrollMotion(),
-          children: const [
-            SlidableAction(
-              onPressed: null,
-              backgroundColor: Color(0xFFFE4A49),
-              foregroundColor: Colors.white,
-              icon: Icons.delete,
-              label: 'Delete',
+                },
+              ),
+              motion: const ScrollMotion(),
+              children: const [
+                SlidableAction(
+                  onPressed: null,
+                  backgroundColor: Color(0xFFFE4A49),
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: 'Delete',
+                ),
+              ],
             ),
-          ],
-      ),
-      child: this.detailItem(
-          title: "CASH",
-          titleColor: cnf.colorBlack,
-          textColor: cnf.colorGray,
-          textLeft: "${this._listCard[index]['cardNumber']}"
-      )),
-    );
+            child: this.detailItem(
+                title: "CASH",
+                titleColor:  (this._listCard[index]['isDefault'] == 1) ? cnf.colorOrange : cnf.colorGray,
+                textColor: cnf.colorGray,
+                textLeft: carNumber("${this._listCard[index]['cardNumber']}"),
+                textRight: "${this._listCard[index]['expiryDate']}"
+            )),
+      );
   }
 
   Widget detailItem({String ? title, String ? titleColor, String ? textColor, String ? textLeft, String ? textRight})
@@ -139,6 +156,7 @@ class _MyPaymentMethod extends State<MyPaymentMethod> {
               label: title!,
               color: titleColor!,
               fontSize: 12.0,
+              fontWeight: FontWeight.w900,
             ),
           ),
           Row(
@@ -146,14 +164,14 @@ class _MyPaymentMethod extends State<MyPaymentMethod> {
             children: [
               MyText(
                 text: (textLeft != null) ? textLeft : '',
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w900,
                 fontSize: 14.0,
                 align: TextAlign.start,
                 color: textColor!,
               ),
               MyText(
                 text: (textRight != null) ? textRight : '',
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w900,
                 fontSize: 14.0,
                 align: TextAlign.start,
                 color: textColor,

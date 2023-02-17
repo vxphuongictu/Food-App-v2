@@ -130,7 +130,7 @@ String query_productDetails({required String id})
 {
   return '''
   query fetchDetailProduct {
-    product(id: "cHJvZHVjdDozNTQ=") {
+    product(id: "${id}") {
       ... on SimpleProduct {
         id
         name
@@ -205,6 +205,51 @@ String query_deleteUser({required String id}) {
       deletedId
     }
   
+  }
+  ''';
+}
+
+// search products
+String query_search_products({required String name})
+{
+  return '''
+  query MyQuery2 {
+    products(where: {search: "${name}"}) {
+      edges {
+        node {
+           ... on SimpleProduct {
+            id
+            name
+            title
+            price
+            content
+            image {
+              sourceUrl
+            }
+            galleryImages {
+              nodes {
+                sourceUrl
+              }
+            }
+          }
+          ... on VariableProduct {
+            id
+            name
+            title
+            price
+            content
+            image {
+              sourceUrl
+            }
+            galleryImages {
+              nodes {
+                sourceUrl
+              }
+            }
+          }
+        }
+      }
+    }
   }
   ''';
 }

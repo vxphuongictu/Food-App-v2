@@ -18,6 +18,7 @@ class _SecondScreen extends State<SecondScreen> {
   Widget build(BuildContext context) {
     return BaseScreen(
       scroll: false,
+      screenBgColor: cnf.colorWhite,
       body: this.secondScreen(context),
     );
   }

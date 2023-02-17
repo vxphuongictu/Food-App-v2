@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:food_e/provider/LikedProvider.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/screens/Payment/MyPaymentMethod.dart';
 import 'package:food_e/screens/account/Account.dart';
 import 'package:food_e/screens/account/AccountProfile.dart';
@@ -24,13 +26,30 @@ import 'package:food_e/screens/welcome/ThirdScreen.dart';
 import 'package:food_e/screens/welcome/AuthenticatedOptionsScreen.dart';
 import 'package:food_e/widgets/BottomNavbarMenu.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:food_e/core/SharedPreferencesClass.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
+import 'provider/BasketProvider.dart';
 
 
 void main() async {
   await initHiveForFlutter();
-  runApp(foodApp());
+  runApp(ChangeNotifierProvider(
+    create: (_) => ThemeModel(),
+    child: foodApp(),
+  ));
+}
+
+
+
+class ThemeModel extends ChangeNotifier {
+  bool _isDarkMode = false;
+
+  bool get isDarkMode => _isDarkMode;
+
+  void toggleTheme() {
+    _isDarkMode = !_isDarkMode;
+    notifyListeners();
+  }
 }
 
 class foodApp extends StatefulWidget {
@@ -45,7 +64,13 @@ class _foodApp extends State<foodApp>
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => BasketProvider()),
+        ChangeNotifierProvider(create: (context) => LikedProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeModeProvider()),
+      ],
+      child: MaterialApp(
         theme: ThemeData(
             appBarTheme: const AppBarTheme(
               systemOverlayStyle: SystemUiOverlayStyle.dark,
@@ -101,7 +126,8 @@ class _foodApp extends State<foodApp>
             default:
               return PageTransition(child: StartAppScreen(), type: PageTransitionType.scale, alignment: Alignment.bottomCenter, duration: Duration(milliseconds: 500));
           }
-      },
+        },
+      ),
     );
   }
 }

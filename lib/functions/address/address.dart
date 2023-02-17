@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:food_e/core/DatabaseManager.dart';
 import 'package:food_e/models/Address.dart';
+import 'package:food_e/screens/Payment/MyPaymentMethod.dart';
+import 'package:food_e/screens/address/AddressSetup.dart';
+import 'package:food_e/screens/address/MyAddress.dart';
 
 handleAddAddress({
   required BuildContext context,
@@ -53,6 +57,8 @@ handleAddAddress({
       isShipping: isShipping,
       type: type
     ));
-    (screenTitle == null) ? Navigator.pushNamed(context, 'payment-setup/') : Navigator.pushNamed(context, 'address-manager/');
+    (screenTitle == null) ? Navigator.push(context,
+    MaterialPageRoute(builder: (context) => MyPaymentMethod())) : Navigator.push(context,
+    MaterialPageRoute(builder: (context) => MyAddress()));
   }
 }

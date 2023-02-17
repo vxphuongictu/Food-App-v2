@@ -7,13 +7,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_e/functions/toColor.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/screens/cart/OrderHistory.dart';
-import 'package:food_e/screens/welcome/AuthenticatedOptionsScreen.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/core/_config.dart' as cnf;
 import 'package:food_e/widgets/MyCycleAvatar.dart';
 import 'package:food_e/widgets/MyText.dart';
 import 'package:food_e/functions/authenticate/logout.dart';
+import 'package:provider/provider.dart';
 
 
 class Account extends StatefulWidget
@@ -26,9 +27,14 @@ class Account extends StatefulWidget
 
 class _Account extends State<Account>
 {
+
+  @override
+  void initState() {}
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
+      screenBgColor: cnf.colorWhite,
       extendBodyBehindAppBar: false,
       disabledBodyHeight: true,
       appbar: false,
@@ -53,12 +59,18 @@ class _Account extends State<Account>
 
   Widget name()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 5.0),
-      child: MyText(
-        text: "John Doe",
-        fontSize: 18.0,
-      ),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 5.0),
+          child: MyText(
+            text: "John Doe",
+            fontSize: 18.0,
+            color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+            fontWeight: FontWeight.w900,
+          ),
+        );
+      },
     );
   }
 
@@ -107,32 +119,40 @@ class _Account extends State<Account>
 
   Widget _line({IconData ? icon, String ? label, GestureTapCallback? onTap})
   {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 15.0),
-              child: Icon(
-                icon,
-                color: cnf.colorMainStreamBlue.toColor(),
-                size: 20.0,
-              ),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return GestureDetector(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 30.0),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 15.0),
+                  child: Icon(
+                    icon,
+                    color: cnf.colorMainStreamBlue.toColor(),
+                    size: 20.0,
+                  ),
+                ),
+                Expanded(
+                  child: MyText(
+                    text: label!,
+                    align: TextAlign.start,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18.0,
+                    color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                  ),
+                ),
+                Icon(
+                  Icons.keyboard_arrow_right_outlined,
+                  color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+                )
+              ],
             ),
-            Expanded(
-              child: MyText(
-                text: label!,
-                align: TextAlign.start,
-                fontWeight: FontWeight.w500,
-                fontSize: 18.0,
-              ),
-            ),
-            const Icon(Icons.keyboard_arrow_right_outlined)
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

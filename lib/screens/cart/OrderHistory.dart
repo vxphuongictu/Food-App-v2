@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:food_e/core/SharedPreferencesClass.dart';
 import 'package:food_e/core/_config.dart' as cnf;
 import 'package:food_e/functions/toColor.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/screens/cart/OrderDetails.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/widgets/OrderItem.dart';
+import 'package:provider/provider.dart';
 
 
 class OrderHistory extends StatefulWidget
@@ -18,7 +21,6 @@ class OrderHistory extends StatefulWidget
 
 class _OrderHistory extends State<OrderHistory>
 {
-
   final List<dynamic> list_order = [
     {'thumbnails': Image.asset('assets/images/prd2.png', fit: BoxFit.cover,), 'title': 'Grilled Salmon', 'totalItem': 5, 'totalPrice': 20.00, 'orderDate': 'May 23, 2023'},
     {'thumbnails': Image.asset('assets/images/prd2.png', fit: BoxFit.cover), 'title': 'Grilled Salmon', 'totalItem': 5, 'totalPrice': 20.00, 'orderDate': 'May 23, 2023'},
@@ -31,41 +33,56 @@ class _OrderHistory extends State<OrderHistory>
   ];
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      appbarBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      disabledBodyHeight: true,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: cnf.colorBlack.toColor(),
-          size: cnf.leadingIconSize,
-        ),
-      ),
-      margin: true,
-      body: _screen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          appbarBgColor: cnf.colorWhite,
+          screenBgColor: cnf.colorWhite,
+          extendBodyBehindAppBar: false,
+          disabledBodyHeight: true,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              size: cnf.leadingIconSize,
+            ),
+          ),
+          margin: true,
+          body: _screen(),
+        );
+      },
     );
   }
 
   Widget _screen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
-            child: MyTitle(
-              label: "ORDER HISTORY",
-            ),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
+                child: MyTitle(
+                  label: "ORDER HISTORY",
+                  color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                ),
+              ),
+              this.list_order_item()
+            ],
           ),
-          this.list_order_item()
-        ],
-      ),
+        );
+      },
     );
   }
 

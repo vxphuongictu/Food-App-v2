@@ -5,6 +5,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io' as io;
+import 'package:food_e/models/Favourites.dart';
 import 'package:food_e/models/Payment.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
@@ -64,6 +65,7 @@ class DatabaseManager
   static const String card_number = "cardNumber";
   static const String card_expiration = "expiryDate";
   static const String card_cvv = "cvv";
+  static const String card_isDefault = "isDefault";
 
   Future<Database> get db async {
     if (_db != null) {
@@ -129,7 +131,8 @@ class DatabaseManager
         "$cardID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
         "$card_number VARCHAR(255),"
         "$card_expiration VARCHAR(50),"
-        "$card_cvv VARCHAR(100)"
+        "$card_cvv VARCHAR(100),"
+        "$card_isDefault INTEGER"
         ")");
   }
 
@@ -194,13 +197,13 @@ class DatabaseManager
   }
 
   /* table favourites */
-  favourite({required String id, required String name, required String thumbnail, required String price}) async {
+  favourite({required Favourites item}) async {
     final dbClient = await db;
-    this.checkFavourite(id: id).then((value) async {
+    this.checkFavourite(id: item.idFavourite).then((value) async {
       if (value == true) {
-        await dbClient.delete('${favourite_tb_name}', where: '${idFavourite} = ?', whereArgs: [id]);
+        await dbClient.delete('${favourite_tb_name}', where: '${idFavourite} = ?', whereArgs: [item.idFavourite]);
       } else {
-        await dbClient.rawInsert('INSERT INTO ${favourite_tb_name}(${idFavourite}, ${nameFavourite}, ${thumbnailFavourite}, ${priceFavourite}) VALUES(?, ?, ?, ?)', [id, name, thumbnail, price]);
+        await dbClient.insert('${favourite_tb_name}', item.toMap());
       }
     });
   }
@@ -214,7 +217,7 @@ class DatabaseManager
     return false;
   }
 
-  Future<List> fetchFavouriteItem() async {
+  fetchFavouriteItem() async {
     final dbClient = await db;
     final result = await dbClient.query("${favourite_tb_name}");
     return result;
@@ -223,6 +226,11 @@ class DatabaseManager
   removeItemInFavourite({required String id}) async {
     final dbClient = await db;
     return await dbClient.delete('${favourite_tb_name}', where: '${idFavourite} = ?', whereArgs: [id]);
+  }
+
+  clearFavourite() async {
+    final dbClient = await db;
+    return await dbClient.delete('${favourite_tb_name}');
   }
 
   /* Table Address */
@@ -275,10 +283,19 @@ class DatabaseManager
     return insert;
   }
 
+  updateCard() async {
+    final dbClient = await db;
+    try {
+      await dbClient.rawUpdate('UPDATE ${card_tb_name} SET ${card_isDefault} = ?', [0]);
+    } catch(e) {
+      //
+    }
+  }
+
   fetchCard() async {
     final dbClient = await db;
     try {
-      final result = await dbClient.query("${card_tb_name}");
+      final result = await dbClient.query("${card_tb_name}", orderBy: "${card_isDefault} DESC");
       return result;
     } catch (e) {
       //

@@ -18,6 +18,7 @@ class _FirstScreenState extends State<FirstScreen> {
   Widget build(BuildContext context) {
     return BaseScreen(
       scroll: false,
+      screenBgColor: cnf.colorWhite,
       body: this.firstScreen(context)
     );
   }

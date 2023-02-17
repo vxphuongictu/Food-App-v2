@@ -25,7 +25,7 @@ class Products {
       title: json['title'],
       description: json['description'],
       price: json['price'],
-      thumbnail: json['image']['sourceUrl']
+      thumbnail: (json['image'] != null) ? json['image']['sourceUrl'] : null
     );
   }
 

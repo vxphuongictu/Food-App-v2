@@ -13,7 +13,6 @@ deleteUser({required String id}) async
         document: gql(queries.query_deleteUser(id: id)),
       )
   );
-
   if (result.data != null) {
     _result["status"] = true;
   } else {

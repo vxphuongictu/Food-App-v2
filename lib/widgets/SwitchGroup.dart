@@ -7,12 +7,14 @@ class SwitchGroup extends StatefulWidget
 {
 
   late String ? label;
+  late String ? lableColor;
   late bool isOn;
   late FontWeight lableFontWeight;
   Function callback;
 
   SwitchGroup({
     this.label,
+    this.lableColor,
     this.isOn = false,
     this.lableFontWeight=FontWeight.w500,
     required this.callback
@@ -41,6 +43,7 @@ class _SwitchGroup extends State<SwitchGroup>
               fontSize: this._sizeText,
               align: TextAlign.start,
               fontWeight: this.widget.lableFontWeight,
+              color: (this.widget.lableColor != null) ? this.widget.lableColor! : '',
             ),
           ),
           switchButton()

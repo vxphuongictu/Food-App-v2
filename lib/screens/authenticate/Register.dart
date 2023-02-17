@@ -3,12 +3,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyInput.dart';
 import 'package:food_e/widgets/MyRichText.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/requests/register.dart';
+import 'package:provider/provider.dart';
 
 
 class Register extends StatefulWidget
@@ -64,36 +66,49 @@ class _Register extends State<Register>
   IconData _pwdIconConfirm = Icons.remove_red_eye;
 
   @override
+  void initState() {}
+
+  @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      extendBodyBehindAppBar: false,
-      appbarBgColor: cnf.colorWhite,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.close,
-          color: cnf.colorBlack.toColor(),
-        ),
-      ),
-      margin: true,
-      body: _registerScreen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          extendBodyBehindAppBar: false,
+          appbarBgColor: cnf.colorWhite,
+          screenBgColor: cnf.colorWhite,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.close,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+            ),
+          ),
+          margin: true,
+          body: _registerScreen(),
+        );
+      },
     );
   }
 
   Widget _registerScreen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyTitle(
-            label: "REGISTER",
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitle(
+                label: "REGISTER",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+              ),
+              Expanded(child: this.registerForm()),
+            ],
           ),
-          Expanded(child: this.registerForm()),
-        ],
-      ),
+        );
+      },
     );
   }
 

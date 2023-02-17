@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/models/Products.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/requests/fetchProducts.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/core/_config.dart' as cnf;
@@ -12,6 +13,7 @@ import 'package:food_e/widgets/RestaurantBox.dart';
 import 'package:food_e/core/SharedPreferencesClass.dart';
 import 'package:food_e/models/Account.dart';
 import 'package:food_e/widgets/Recommend.dart';
+import 'package:provider/provider.dart';
 
 
 class Home extends StatefulWidget
@@ -27,7 +29,6 @@ class Home extends StatefulWidget
 class _Home extends State<Home>
 {
 
-  bool isDarkMode = false;
   final double fontSize = 18.0;
   final double spaceBetweenFromBannerToHeader = 30.0;
   final double spaceBetweenFromTitleToContent = 20.0;
@@ -72,13 +73,6 @@ class _Home extends State<Home>
         });
       }
     });
-    SharedPreferencesClass().get_dark_mode_options().then((value){
-      if (value != null) {
-        setState(() {
-          this.isDarkMode = value;
-        });
-      }
-    });
     super.initState();
   }
 
@@ -86,7 +80,7 @@ class _Home extends State<Home>
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      screenBgColor: (this.isDarkMode == true) ? cnf.darkModeColorbg : cnf.lightModeColorbg,
+      screenBgColor: cnf.colorWhite,
       disabledBodyHeight: true,
       body: this._homeBody(),
     );
@@ -125,77 +119,88 @@ class _Home extends State<Home>
 
   Widget userInfo()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: cnf.wcLogoMarginTop, left: cnf.marginScreen, right: cnf.marginScreen),
-      child: Row(
-        children: [
-          MyRichText(
-            firstText: "Hello, ",
-            secondText: "${this.user_data?.displayname}",
-            thirdText: "!",
-            secondTextColor: cnf.colorMainStreamBlue,
-            firstTextColor: cnf.colorLightBlack,
-            fontfamily: "Poppins",
-            fontWeight: FontWeight.w500,
-            fontSize: this.fontSize,
-          ),
-          const Expanded(child: SizedBox()),
-          MyText(
-            text: "HOME",
-            fontWeight: FontWeight.w400,
-            fontFamily: "Bebas Neue",
-            fontSize: this.fontSize,
-            color: cnf.colorOrange,
-          ),
-          Padding(
-              padding: const EdgeInsets.only(left: 5.0, bottom: 2.5),
-              child: Icon(
-                Icons.location_on_outlined,
-                size: this.fontSize,
-                color: cnf.colorOrange.toColor(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: cnf.wcLogoMarginTop, left: cnf.marginScreen, right: cnf.marginScreen),
+          child: Row(
+            children: [
+              MyRichText(
+                firstText: "Hello, ",
+                secondText: "${this.user_data?.displayname}",
+                thirdText: "!",
+                secondTextColor: cnf.colorMainStreamBlue,
+                firstTextColor: (value.darkmode == true) ? cnf.colorWhite : cnf.colorLightBlack,
+                fontfamily: "Poppins",
+                fontWeight: FontWeight.w500,
+                fontSize: this.fontSize,
+              ),
+              const Expanded(child: SizedBox()),
+              MyText(
+                text: "HOME",
+                fontWeight: FontWeight.w400,
+                fontFamily: "Bebas Neue",
+                fontSize: this.fontSize,
+                color: cnf.colorOrange,
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(left: 5.0, bottom: 2.5),
+                  child: Icon(
+                    Icons.location_on_outlined,
+                    size: this.fontSize,
+                    color: cnf.colorOrange.toColor(),
+                  )
               )
-          )
-        ],
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   Widget banner()
   {
     return Padding(
-      padding: EdgeInsets.only(top: this.spaceBetweenFromBannerToHeader),
-      child: Image.asset("assets/images/BannerCard.png", width: double.infinity, fit: BoxFit.cover,)
+        padding: EdgeInsets.only(top: this.spaceBetweenFromBannerToHeader),
+        child: Image.asset("assets/images/BannerCard.png", width: double.infinity, fit: BoxFit.cover,)
     );
   }
 
   Widget restaurants()
   {
-    return Padding(
-      padding: EdgeInsets.only(left: cnf.marginScreen, right: cnf.marginScreen, top: this.spaceBetweenFromBannerToContent),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyText(
-            text: "RESTAURANTS",
-            fontFamily: "Bebas Neue",
-            fontSize: this.fontSize,
-            color: cnf.darkModeColorbg,
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(left: cnf.marginScreen, right: cnf.marginScreen),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(bottom: this.spaceBetweenFromTitleToContent),
+                child: MyText(
+                  text: "RESTAURANTS",
+                  fontFamily: "Bebas Neue",
+                  fontSize: this.fontSize,
+                  color: (value.darkmode == true) ? cnf.lightModeColorbg : cnf.darkModeColorbg,
+                ),
+              ),
+              SizedBox(
+                height: cnf.boxRestaurantsSize,
+                width: double.infinity,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: this.listRestaurants.length,
+                    itemBuilder: (context, index) => Container(
+                      margin: const EdgeInsets.only(right: cnf.marginScreen, bottom: cnf.marginScreen),
+                      child: RestaurantBox(childWidget: this.listRestaurants[index]),
+                    )
+                ),
+              )
+            ],
           ),
-          SizedBox(
-            height: cnf.boxRestaurantsSize,
-            width: double.infinity,
-            child: ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: this.listRestaurants.length,
-                itemBuilder: (context, index) => Container(
-                  margin: const EdgeInsets.only(right: cnf.marginScreen),
-                  child: RestaurantBox(childWidget: this.listRestaurants[index]),
-                )
-            ),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 }

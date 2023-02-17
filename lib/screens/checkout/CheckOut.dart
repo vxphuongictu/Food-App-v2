@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/screens/Payment/MyPaymentMethod.dart';
+import 'package:food_e/screens/Payment/PaymentSetup.dart';
+import 'package:food_e/screens/address/AddressSetup.dart';
 import 'package:food_e/screens/address/MyAddress.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
@@ -9,6 +12,7 @@ import 'package:food_e/widgets/ModalCheckOut.dart';
 import 'package:food_e/widgets/MyText.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/core/DatabaseManager.dart';
+import 'package:provider/provider.dart';
 
 
 class CheckOut extends StatefulWidget
@@ -48,131 +52,160 @@ class _CheckOut extends State<CheckOut> {
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      appbarBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.arrow_back_ios,
-          color: cnf.colorBlack.toColor(),
-          size: cnf.leadingIconSize,
-        ),
-      ),
-      margin: true,
-      body: addressSetupScreen(context),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbar: true,
+          appbarBgColor: cnf.colorWhite,
+          screenBgColor: cnf.colorWhite,
+          extendBodyBehindAppBar: false,
+          leading: IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              size: cnf.leadingIconSize,
+            ),
+          ),
+          margin: true,
+          body: addressSetupScreen(context),
+        );
+      },
     );
   }
 
   Widget addressSetupScreen(context)
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: MyTitle(
-              label: "CHECKOUT",
-            ),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: MyTitle(
+                  label: "CHECKOUT",
+                  color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                ),
+              ),
+              this.checkout()
+            ],
           ),
-          this.checkout()
-        ],
-      ),
+        );
+      },
     );
   }
 
   Widget checkout()
   {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        MyTitle(
-          label: "PRICE",
-          fontSize: 12.0,
-          fontFamily: "Bebas Neue",
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 50.0, top: 10.0),
-          child: MyTitle(
-            label: "\$ ${this.widget.totalPrice}",
-            fontFamily: "Bebas Neue",
-            fontSize: 36.0,
-            color: cnf.colorMainStreamBlue,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 50.0),
-          child: details(title: "DELIVER TO", lable: "${this._typeAddress}", onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyAddress()
-              )
-          )),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 50.0),
-          child: details(title: "PAYMENT METHOD", lable: "${this._cardNumber}", onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyPaymentMethod()
-              )
-          )),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
-          child: LargeButton(
-            onTap: () => showModalBottomSheet(
-              context: context,
-              backgroundColor: Colors.transparent,
-              enableDrag: true,
-              isDismissible: true,
-              isScrollControlled: true,
-              builder: (context){
-                return ModalCheckOut(totalCost: this.widget.totalPrice);
-              },
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            MyTitle(
+              label: "PRICE",
+              fontSize: 12.0,
+              fontFamily: "Bebas Neue",
+              color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
             ),
-            label: "CONFIRM ORDER",
-          ),
-        )
-      ],
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50.0, top: 10.0),
+              child: MyTitle(
+                label: "\$ ${this.widget.totalPrice}",
+                fontFamily: "Bebas Neue",
+                fontSize: 36.0,
+                color: cnf.colorMainStreamBlue,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: details(title: "DELIVER TO", lable: "${this._typeAddress}", onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyAddress()
+                  )
+              )),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: details(title: "PAYMENT METHOD", lable: "${this._cardNumber}", onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyPaymentMethod()
+                  )
+              )),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
+              child: LargeButton(
+                onTap: () {
+                  if (this._typeAddress == null) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => AddressSetup(title: "Add new addresss")));
+                  } else if (this._cardNumber == null) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => PaymentSetup(title: "Add new payment")));
+                  } else {
+                    showModalBottomSheet(
+                      context: context,
+                      backgroundColor: Colors.transparent,
+                      enableDrag: true,
+                      isDismissible: true,
+                      isScrollControlled: true,
+                      builder: (context) {
+                        return ModalCheckOut(totalCost: this.widget.totalPrice);
+                      },
+                    );
+                  }
+                },
+                label: "CONFIRM ORDER",
+              ),
+            )
+          ],
+        );
+      },
     );
   }
 
   Widget details({String ? title, String ? lable, GestureTapCallback ? onTap})
   {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: MyTitle(
-            label: title!,
-            fontSize: 12.0,
-          ),
-        ),
-        Row(
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: MyText(
-                text: lable!,
-                fontWeight: FontWeight.w500,
-                fontSize: 14.0,
-                align: TextAlign.left,
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: MyTitle(
+                label: title!,
+                fontSize: 12.0,
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
               ),
             ),
-            GestureDetector(
-              onTap: onTap,
-              child: MyText(
-                text: "Change",
-                color: cnf.colorOrange,
-                fontSize: 14.0,
-              ),
+            Row(
+              children: [
+                Expanded(
+                  child: MyText(
+                    text: lable!,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.0,
+                    align: TextAlign.left,
+                    color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: onTap,
+                  child: MyText(
+                    text: "Change",
+                    color: cnf.colorOrange,
+                    fontSize: 14.0,
+                  ),
+                )
+              ],
             )
           ],
-        )
-      ],
+        );
+      },
     );
   }
 }

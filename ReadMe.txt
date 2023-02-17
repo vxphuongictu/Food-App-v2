@@ -19,7 +19,6 @@ Dependencies:
 - animated_text_kit: ^4.2.2
 - flutter_shake_animated: ^0.0.5
 - share_plus: ^6.3.0
-- flutter_add_to_cart_button: ^1.1.0
 - flutter_staggered_animations: ^1.0.0
 - page_transition: ^2.0.9
 - confirm_dialog: ^1.0.1
@@ -28,3 +27,4 @@ Dependencies:
 - custom_radio_grouped_button: ^2.1.2+2
 - flutter_switch: ^0.3.2
 - editable_image: ^2.0.0
+- provider: ^6.0.1

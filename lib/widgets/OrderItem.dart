@@ -12,6 +12,7 @@ class OrderItem extends StatefulWidget
   int totalItem;
   double totalPrice;
   String orderDate;
+  String ? backgroundColor;
   GestureTapCallback? onTap;
   GestureLongPressCallback? onLongPress;
 
@@ -22,7 +23,8 @@ class OrderItem extends StatefulWidget
     required this.totalPrice,
     required this.orderDate,
     this.onTap,
-    this.onLongPress
+    this.onLongPress,
+    this.backgroundColor
   });
 
   @override
@@ -68,7 +70,7 @@ class _OrderItem extends State<OrderItem>
           width: double.infinity,
           height: 100.0,
           decoration: BoxDecoration(
-              color: cnf.colorWhite.toColor(),
+              color: (this.widget.backgroundColor != null) ? this.widget.backgroundColor!.toColor() : cnf.colorWhite.toColor(),
               borderRadius: BorderRadius.all(Radius.circular(this.radius)),
               boxShadow: [
                 BoxShadow(

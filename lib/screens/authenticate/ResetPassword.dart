@@ -3,11 +3,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyInput.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/requests/forgot_password.dart.dart';
+import 'package:provider/provider.dart';
 
 
 class ResetPassword extends StatefulWidget
@@ -59,46 +61,60 @@ class _ResetPassword extends State<ResetPassword>
   }
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      extendBodyBehindAppBar: false,
-      disabledBodyHeight: true,
-      // disabledBodyHeight: true,
-      appbarBgColor: cnf.colorWhite,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.close,
-          color: cnf.colorBlack.toColor(),
-        ),
-      ),
-      margin: true,
-      body: _resetPasswordScreen()
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+            appbar: true,
+            extendBodyBehindAppBar: false,
+            appbarBgColor: cnf.colorWhite,
+            screenBgColor: cnf.colorWhite,
+            disabledBodyHeight: true,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.close,
+                color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              ),
+            ),
+            margin: true,
+            body: _resetPasswordScreen()
+        );
+      },
     );
   }
 
   Widget _resetPasswordScreen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyTitle(
-            label: "RESET PASSWORD",
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitle(
+                label: "RESET PASSWORD",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+              ),
+              Image.asset("assets/images/confirm-image.png"),
+              this.resetPasswordScreen(),
+              Padding(
+                padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop, top: cnf.wcLogoMarginTop),
+                child: LargeButton(
+                  onTap: this._resetPassword,
+                  label: "RESET PASSWORD",
+                ),
+              )
+            ],
           ),
-          Image.asset("assets/images/confirm-image.png"),
-          this.resetPasswordScreen(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop, top: cnf.wcLogoMarginTop),
-            child: LargeButton(
-              onTap: this._resetPassword,
-              label: "RESET PASSWORD",
-            ),
-          )
-        ],
-      ),
+        );
+      },
     );
   }
 

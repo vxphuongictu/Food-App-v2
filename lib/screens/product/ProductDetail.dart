@@ -1,9 +1,12 @@
 import 'package:banner_carousel/banner_carousel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_e/core/DatabaseManager.dart';
 import 'package:food_e/functions/toColor.dart';
+import 'package:food_e/provider/BasketProvider.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
-import 'package:food_e/widgets/LargeButtonAddToCart.dart';
+import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyInput.dart';
 import 'package:food_e/widgets/MyReadMoreText.dart';
 import 'package:food_e/widgets/MyText.dart';
@@ -14,6 +17,7 @@ import 'package:food_e/widgets/ButtonContainer.dart';
 import 'package:food_e/requests/getProductDetail.dart';
 import 'package:food_e/models/ProductDetails.dart';
 import 'package:food_e/widgets/Loading.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:food_e/models/Cart.dart';
 
@@ -32,7 +36,6 @@ class ProductDetail extends StatefulWidget
 
 class _ProductDetailState extends State<ProductDetail>
 {
-
   // screen config
   final spaceFromTitleToBanner = 20.0;
   final spaceFromDescToTitle = 30.0;
@@ -72,6 +75,7 @@ class _ProductDetailState extends State<ProductDetail>
   Widget build(BuildContext context) {
     return BaseScreen(
       appbar: true,
+      screenBgColor: cnf.colorWhite,
       disabledBodyHeight: true,
       scroll: true,
       leading: ButtonContainer(childWidget: Icon(Icons.keyboard_arrow_left, size: this.appbarIconSize, color: cnf.colorWhite.toColor()), onTap: () => Navigator.pop(context)),
@@ -173,7 +177,7 @@ class _ProductDetailState extends State<ProductDetail>
                       child: MyTitle(
                         fontSize: 18,
                         label: 'DESCRIPTION',
-                        color: cnf.colorLightBlack,
+                        color: cnf.colorLightGrayShadow,
                       ),
                     ),
                     Padding(
@@ -276,14 +280,21 @@ class _ProductDetailState extends State<ProductDetail>
                       height: cnf.large_button_h,
                       margin: const EdgeInsets.only(top: cnf.wcLogoMarginTop, bottom: cnf.wcLogoMarginTop),
                       alignment: Alignment.bottomCenter,
-                      child: LargeButtonAddToCart(
-                        cartItem: Cart(
-                          productID: this.widget.id,
-                          productName: "${data?.title}",
-                          productQuantity: int.parse(this.quantityController.text),
-                          productPrice: "${data?.price}",
-                          productThumbnails: "${data?.galleryImages![0]['sourceUrl']}",
-                        ),
+                      child: LargeButton(
+                        onTap: () async {
+                          EasyLoading.show(status: "Wating ...");
+                          Provider.of<BasketProvider>(context, listen: false).addCart(
+                            Cart(
+                              productID: this.widget.id,
+                              productName: "${data?.title}",
+                              productQuantity: int.parse(this.quantityController.text),
+                              productPrice: "${data?.price}",
+                              productThumbnails: "${data?.galleryImages![0]['sourceUrl']}",
+                            ),
+                          );
+                          EasyLoading.showSuccess("Added to cart");
+                        },
+                        label: "ADD TO BASKET",
                       )
                     )
                   ],
@@ -292,7 +303,13 @@ class _ProductDetailState extends State<ProductDetail>
             ],
           );
         } else {
-          return Loading();
+          return SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: Loading(),
+            ),
+          );
         }
       },
     );

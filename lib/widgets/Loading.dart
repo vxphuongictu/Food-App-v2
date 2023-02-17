@@ -16,23 +16,9 @@ class _Loading extends State<Loading> {
 
   @override
   Widget build(BuildContext context) {
-      return Stack(
-        children: [
-          Opacity(
-            opacity: .4,
-            child: Container(
-              decoration: BoxDecoration(
-                color: cnf.colorBlack.toColor(),
-              ),
-            ),
-          ),
-          Center(
-            child: LoadingAnimationWidget.halfTriangleDot(
-              color: cnf.colorMainStreamBlue.toColor(),
-              size: 60,
-            ),
-          )
-        ],
+      return LoadingAnimationWidget.halfTriangleDot(
+        color: cnf.colorMainStreamBlue.toColor(),
+        size: 60,
       );
   }
 }

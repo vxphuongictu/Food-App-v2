@@ -1,11 +1,12 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
 import 'package:food_e/widgets/MyRichText.dart';
 import 'package:food_e/core/_config.dart' as cnf;
 import 'package:food_e/widgets/MyAnimatedText.dart';
-import 'package:food_e/core/SharedPreferencesClass.dart';
+import 'package:provider/provider.dart';
 
 
 class AuthenticatedOptionsScreen extends StatefulWidget
@@ -19,8 +20,6 @@ class AuthenticatedOptionsScreen extends StatefulWidget
 
 class _AuthenticatedOptionsScreen extends State<AuthenticatedOptionsScreen>
 {
-
-  bool isDarkMode = false;
   final String _registerColor = "#2FDBBC";
   double _scaleImage = 1.0;
 
@@ -32,21 +31,13 @@ class _AuthenticatedOptionsScreen extends State<AuthenticatedOptionsScreen>
         this._scaleImage = .8;
       }),
     );
-
-    SharedPreferencesClass().get_dark_mode_options().then((value){
-      if (value != null) {
-        setState(() {
-          this.isDarkMode = value;
-        });
-      }
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
       scroll: false,
-      screenBgColor: (this.isDarkMode == true) ? cnf.darkModeColorbg : cnf.lightModeColorbg,
+      screenBgColor: cnf.lightModeColorbg,
       body: _mainScreen(context),
       margin: true,
     );
@@ -136,13 +127,17 @@ class _AuthenticatedOptionsScreen extends State<AuthenticatedOptionsScreen>
   }
 
   Widget logo(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, "/"),
-      child: SizedBox(
-        width: 70.0,
-        height: 30.0,
-        child: Image.asset("assets/images/FOOD-E.png", fit: BoxFit.contain),
-      ),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return GestureDetector(
+          onTap: () => Navigator.pushNamed(context, "/"),
+          child: SizedBox(
+            width: 70.0,
+            height: 30.0,
+            child: (value.darkmode == true) ? Image.asset("assets/images/FOOD-E-White.png", fit: BoxFit.contain) : Image.asset("assets/images/FOOD-E.png", fit: BoxFit.contain),
+          ),
+        );
+      },
     );
   }
 }

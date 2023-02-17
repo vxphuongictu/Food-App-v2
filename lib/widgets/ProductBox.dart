@@ -1,6 +1,4 @@
-/*
- * Item box in home screen (Recommended for you)
- */
+/// The widget used to list of foods screen
 
 
 import 'package:flutter/material.dart';
@@ -16,7 +14,7 @@ import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 
 
-class ItemBox extends StatefulWidget
+class ProductBox extends StatefulWidget
 {
 
   String ? productID;
@@ -30,7 +28,7 @@ class ItemBox extends StatefulWidget
   GestureTapCallback ? onTap;
 
 
-  ItemBox({
+  ProductBox({
     this.productID,
     this.productQuantity,
     this.thumbnails,
@@ -43,13 +41,13 @@ class ItemBox extends StatefulWidget
   });
 
   @override
-  State<ItemBox> createState() {
-    return _ItemBox();
+  State<ProductBox> createState() {
+    return _ProductBox();
   }
 }
 
 
-class _ItemBox extends State<ItemBox>
+class _ProductBox extends State<ProductBox>
 {
 
   final double spaceBetween = 10.0;
@@ -114,7 +112,6 @@ class _ItemBox extends State<ItemBox>
               ]
           ),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               GestureDetector(
                 onTap: this.widget.onTap,
@@ -135,25 +132,25 @@ class _ItemBox extends State<ItemBox>
                       ),
                     ),
                     Positioned(
-                      bottom: 0,
+                      top: 0,
                       right: 0,
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: ButtonContainer(
                           childWidget: LikeButton(
-                            size: 20.0,
-                            circleColor: const CircleColor(
-                                start: Color(0xff00ddff),
-                                end: Color(0xff0099cc)
-                            ),
-                            likeBuilder: (bool isLiked) {
-                              return Icon(
-                                (this.isFavourite == false) ? Icons.favorite_outline : Icons.favorite_outlined,
-                                color: (this.isFavourite == false) ? cnf.colorWhite.toColor() : cnf.colorLightRed.toColor(),
-                                size: 20.0,
-                              );
-                            },
-                            onTap: onLikeButtonTapped
+                              size: 20.0,
+                              circleColor: const CircleColor(
+                                  start: Color(0xff00ddff),
+                                  end: Color(0xff0099cc)
+                              ),
+                              likeBuilder: (bool isLiked) {
+                                return Icon(
+                                  (this.isFavourite == false) ? Icons.favorite_outline : Icons.favorite_outlined,
+                                  color: (this.isFavourite == false) ? cnf.colorWhite.toColor() : cnf.colorLightRed.toColor(),
+                                  size: 20.0,
+                                );
+                              },
+                              onTap: onLikeButtonTapped
                           ),
                         ),
                       ),
@@ -166,7 +163,8 @@ class _ItemBox extends State<ItemBox>
                 child: Padding(
                   padding: EdgeInsets.only(top: this.spaceBetween, bottom: this.spaceBetween, right: this.spaceBetween, left: this.spaceBetween),
                   child: MyTitle(
-                    align: TextAlign.left,
+                    align: TextAlign.center,
+                    maxLines: 2,
                     label: this.widget.title,
                     textOverflow: true,
                     fontFamily: "Poppins",

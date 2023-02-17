@@ -91,7 +91,6 @@ class SharedPreferencesClass
     await prefs.setString('account', '');
   }
 
-
   // dark mode config
   set_dark_mode({required bool option}) async {
     final SharedPreferences prefs = await _prefs;

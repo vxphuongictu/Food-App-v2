@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/core/_config.dart' as cnf;
+import 'package:food_e/provider/ThemeModeProvider.dart';
 import 'package:food_e/screens/authenticate/EmailSent.dart';
 import 'package:food_e/widgets/BaseScreen.dart';
 import 'package:food_e/widgets/LargeButton.dart';
@@ -9,6 +10,7 @@ import 'package:food_e/widgets/MyInput.dart';
 import 'package:food_e/widgets/MyText.dart';
 import 'package:food_e/widgets/MyTitle.dart';
 import 'package:food_e/requests/forgot_password.dart.dart';
+import 'package:provider/provider.dart';
 
 
 class ForgotPassword extends StatefulWidget
@@ -59,48 +61,58 @@ class _ForgotPassword extends State<ForgotPassword>
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      appbar: true,
-      appbarBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      leading: IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(
-          Icons.close,
-          color: cnf.colorBlack.toColor(),
-        ),
-      ),
-      margin: true,
-      body: _registerScreen(),
+    return Consumer<ThemeModeProvider>(
+        builder: (context, value, child) {
+          return BaseScreen(
+            appbar: true,
+            appbarBgColor: cnf.colorWhite,
+            screenBgColor: cnf.colorWhite,
+            extendBodyBehindAppBar: false,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.close,
+                color: (value.darkmode == true) ? cnf.colorWhite.toColor() : cnf.colorBlack.toColor(),
+              ),
+            ),
+            margin: true,
+            body: _registerScreen(),
+          );
+        },
     );
   }
 
   Widget _registerScreen()
   {
-    return Padding(
-      padding: const EdgeInsets.only(top: 50.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          MyTitle(
-            label: "FORGOT PASSWORD",
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 50.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              MyTitle(
+                label: "FORGOT PASSWORD",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+              ),
+              MyText(
+                text: "We’ll send a password reset link to your email.",
+                color: cnf.colorGray,
+                align: TextAlign.start,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w500,
+                fontFamily: "Poppins",
+              ),
+              AnimatedOpacity(
+                duration: const Duration(milliseconds: 500),
+                opacity: (this._visiable) ? 1.0 : 0.0,
+                child: Image.asset('assets/images/forgot-password-concept-isolated-white_263070-194.webp'),
+              ),
+              this.formForgot()
+            ],
           ),
-          MyText(
-            text: "We’ll send a password reset link to your email.",
-            color: cnf.colorGray,
-            align: TextAlign.start,
-            fontSize: 14.0,
-            fontWeight: FontWeight.w500,
-            fontFamily: "Poppins",
-          ),
-          AnimatedOpacity(
-            duration: const Duration(milliseconds: 500),
-            opacity: (this._visiable) ? 1.0 : 0.0,
-            child: Image.asset('assets/images/forgot-password-concept-isolated-white_263070-194.webp'),
-          ),
-          this.formForgot()
-        ],
-      ),
+        );
+      },
     );
   }
 
