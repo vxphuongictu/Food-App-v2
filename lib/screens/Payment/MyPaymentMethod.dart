@@ -42,10 +42,9 @@ class _MyPaymentMethod extends State<MyPaymentMethod> {
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           extendBodyBehindAppBar: false,
-          scroll: false,
-          screenBgColor: cnf.colorWhite,
+          scroll: true,
           disabledBodyHeight: true,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -71,26 +70,26 @@ class _MyPaymentMethod extends State<MyPaymentMethod> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: MyTitle(
-                  label: "MY PAYMENT METHODS",
-                  color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
-                ),
+              MyTitle(
+                label: "MY PAYMENT METHODS",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
               ),
               (this._listCard.length > 0) ? this.screen() : Container(
+                width: double.infinity,
+                height: MediaQuery.of(context).size.height * .5,
                 margin: const EdgeInsets.only(bottom: cnf.wcDistanceButtonAndText),
                 child: Image.asset("assets/images/no-payment.png"),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
-                child: LargeButton(
-                  label: "ADD NEW PAYMENT METHOD",
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => PaymentSetup(title: "ADD NEW CARD")
-                      )
-                  ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .1,
+              ),
+              LargeButton(
+                label: "ADD NEW PAYMENT METHOD",
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PaymentSetup(title: "ADD NEW CARD")
+                    )
                 ),
               )
             ],

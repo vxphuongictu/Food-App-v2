@@ -121,8 +121,8 @@ class _AddressSetupState extends State<AddressSetup> {
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           screenBgColor: cnf.colorWhite,
-          appbarBgColor: cnf.colorWhite,
           extendBodyBehindAppBar: false,
           scroll: true,
           disabledBodyHeight: true,

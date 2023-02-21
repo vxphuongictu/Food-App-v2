@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:food_e/functions/toColor.dart';
 import 'package:food_e/models/Cart.dart';
 import 'package:food_e/models/Products.dart';
 import 'package:food_e/provider/BasketProvider.dart';
@@ -42,13 +43,18 @@ class _ListProducts extends State<ListProducts>
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-        appbar: false,
-        screenBgColor: cnf.colorWhite,
-        extendBodyBehindAppBar: false,
-        disabledBodyHeight: true,
-        scroll: true,
-        body: _productsScreen()
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+            appbar: false,
+            appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
+            screenBgColor: cnf.colorWhite,
+            extendBodyBehindAppBar: false,
+            disabledBodyHeight: true,
+            scroll: true,
+            body: _productsScreen()
+        );
+      },
     );
   }
 

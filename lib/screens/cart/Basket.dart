@@ -63,7 +63,7 @@ class _Basket extends State<Basket>
               ),
             ),
             MyText(
-              text: "Looks like you haven't added anythingto your cart yet",
+              text: "Looks like you haven't added anything to your cart yet",
               color: cnf.colorLightGrayShadow,
               fontWeight: FontWeight.w600,
               fontSize: 15.0,

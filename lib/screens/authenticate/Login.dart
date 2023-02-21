@@ -85,7 +85,7 @@ class _Login extends State<Login>
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           extendBodyBehindAppBar: false,
           screenBgColor: cnf.colorWhite,
           disabledBodyHeight: true,
@@ -116,10 +116,13 @@ class _Login extends State<Login>
                 label: "LOGIN",
                 color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
               ),
-              AnimatedOpacity(
-                opacity: this._visible ? 1.0 : 0.0,
-                duration: const Duration(milliseconds: 300),
-                child: Image.asset('assets/images/login.png'),
+              SizedBox(
+                width: double.infinity,
+                child: AnimatedOpacity(
+                  opacity: this._visible ? 1.0 : 0.0,
+                  duration: const Duration(milliseconds: 300),
+                  child: Image.asset('assets/images/login.png'),
+                ),
               ),
               this.registerForm()
             ],

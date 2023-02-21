@@ -18,7 +18,7 @@ class BaseScreen extends StatefulWidget
   String title; // title
   Widget? leading; // leading
   Widget? body; // body
-  String appbarBgColor; // appbar color
+  Color ? appbarBgColor; // appbar color
   Widget? actions; // actions
   bool margin; // margin of body with screen. it defined in config file
   bool appbar; // show or hidden appbar
@@ -32,7 +32,7 @@ class BaseScreen extends StatefulWidget
     this.body,
     this.title = "",
     this.leading,
-    this.appbarBgColor= "",
+    this.appbarBgColor,
     this.actions,
     this.margin=false,
     this.appbar=false,
@@ -76,8 +76,8 @@ class _BaseScreen extends State<BaseScreen>
                   extendBodyBehindAppBar: this.widget.extendBodyBehindAppBar,
                   appBar: (this.widget.appbar == true) ? AppBar(
                     // backgroundColor: (this.widget.appbarBgColor == "")? Colors.transparent : this.widget.appbarBgColor.toColor(),
-                    backgroundColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : cnf.lightModeColorbg.toColor(),
-                    elevation: (this.widget.appbarBgColor == "" || this.widget.appbarBgColor == cnf.colorWhite) ? 0.0 : null,
+                    backgroundColor: (this.widget.appbarBgColor == null) ? (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : cnf.lightModeColorbg.toColor() : this.widget.appbarBgColor,
+                    elevation: (this.widget.appbarBgColor != null) ? 0.0 : null,
                     title: (this.widget.title != "") ? MyText(
                       text: this.widget.title,
                       color: (this.widget.colorTitle != "") ? this.widget.colorTitle! : cnf.colorBlack,

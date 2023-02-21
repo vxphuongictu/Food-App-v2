@@ -61,7 +61,7 @@ const double searchMaxHistory = 10.0;
 const int ForgotPwdTimeToResend = 30;
 
 /* graphql api */
-const httpLink_cnf = "http://localhost/Mixi/graphql";
+const httpLink_cnf = "http://72.arrowhitech.net/tn3/mixy_server/graphql";
 
 /* fetch countries in Viet Nam */
 const String country_uri_api = "https://restcountries.com/v3.1/all";

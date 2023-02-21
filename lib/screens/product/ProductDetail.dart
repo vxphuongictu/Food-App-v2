@@ -75,6 +75,7 @@ class _ProductDetailState extends State<ProductDetail>
   Widget build(BuildContext context) {
     return BaseScreen(
       appbar: true,
+      appbarBgColor: Colors.transparent,
       screenBgColor: cnf.colorWhite,
       disabledBodyHeight: true,
       scroll: true,
@@ -119,7 +120,7 @@ class _ProductDetailState extends State<ProductDetail>
                     spaceBetween: 2,
                     widthAnimation: 20,
                 ),
-                height: MediaQuery.of(context).size.height * .34,
+                height: 300.0,
                 activeColor: Colors.amberAccent,
                 disableColor: Colors.white,
                 animation: true,
@@ -225,34 +226,42 @@ class _ProductDetailState extends State<ProductDetail>
                                     boder: false,
                                     textColor: cnf.colorGray,
                                   ),
-                                  IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      setState(() {
-                                        this.quantityController.text = remove(currentNumber: int.parse(this.quantityController.text)).toString();
-                                      });
-                                    },
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.minus,
-                                      color: cnf.colorMainStreamBlue
-                                          .toColor(),
-                                    )
+                                  SizedBox(
+                                    width: 25.0,
+                                    child: IconButton(
+                                      iconSize: 15.0,
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        setState(() {
+                                          this.quantityController.text = remove(currentNumber: int.parse(this.quantityController.text)).toString();
+                                        });
+                                      },
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.minus,
+                                        color: cnf.colorMainStreamBlue
+                                            .toColor(),
+                                      )
+                                    ),
                                   ),
-                                  IconButton(
-                                    padding: EdgeInsets.zero,
-                                    onPressed: () {
-                                      setState(() {
-                                        this.quantityController.text =
-                                            add(currentNumber: int.parse(
-                                                this.quantityController
-                                                    .text)).toString();
-                                      });
-                                    },
-                                    icon: FaIcon(
-                                      FontAwesomeIcons.plus,
-                                      color: cnf.colorMainStreamBlue
-                                          .toColor(),
-                                    )
+                                  SizedBox(
+                                    width: 25.0 ,
+                                    child: IconButton(
+                                      iconSize: 15.0,
+                                      padding: EdgeInsets.zero,
+                                      onPressed: () {
+                                        setState(() {
+                                          this.quantityController.text =
+                                              add(currentNumber: int.parse(
+                                                  this.quantityController
+                                                      .text)).toString();
+                                        });
+                                      },
+                                      icon: FaIcon(
+                                        FontAwesomeIcons.plus,
+                                        color: cnf.colorMainStreamBlue
+                                            .toColor(),
+                                      )
+                                    ),
                                   )
                                 ],
                               ),

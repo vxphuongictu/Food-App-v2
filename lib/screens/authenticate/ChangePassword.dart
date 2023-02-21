@@ -48,9 +48,10 @@ class _ChangePassword extends State<ChangePassword>
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           screenBgColor: cnf.colorWhite,
           extendBodyBehindAppBar: false,
+          disabledBodyHeight: true,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: Icon(
@@ -79,7 +80,9 @@ class _ChangePassword extends State<ChangePassword>
                 label: "CHANGE PASSWORD",
                 color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
               ),
-              const Expanded(child: SizedBox()),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * .3,
+              ),
               this.form_input(),
               this.submit_button()
             ],

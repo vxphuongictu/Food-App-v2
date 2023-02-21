@@ -36,7 +36,8 @@ class _AuthenticatedOptionsScreen extends State<AuthenticatedOptionsScreen>
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      scroll: false,
+      scroll: true,
+      disabledBodyHeight: true,
       screenBgColor: cnf.lightModeColorbg,
       body: _mainScreen(context),
       margin: true,
@@ -53,14 +54,12 @@ class _AuthenticatedOptionsScreen extends State<AuthenticatedOptionsScreen>
         children: [
           this.logo(context),
           this.getStartText(),
-          Expanded(
-              child: Center(
-                child: AnimatedScale(
-                  duration: const Duration(seconds: 2),
-                  scale: this._scaleImage,
-                  child: Image.asset('assets/images/LoginTC-cloud-copy@3x-1.png'),
-                ),
-              )
+          Center(
+            child: AnimatedScale(
+              duration: const Duration(seconds: 2),
+              scale: this._scaleImage,
+              child: Image.asset('assets/images/LoginTC-cloud-copy@3x-1.png'),
+            ),
           ),
           this.loginButton(),
           this.registerButton(),

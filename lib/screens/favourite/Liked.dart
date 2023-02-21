@@ -37,7 +37,6 @@ class _Liked extends State<Liked>
   Widget build(BuildContext context) {
     return BaseScreen(
       appbar: false,
-      screenBgColor: cnf.colorWhite,
       extendBodyBehindAppBar: false,
       disabledBodyHeight: true,
       scroll: true,
@@ -48,11 +47,10 @@ class _Liked extends State<Liked>
   Widget _favouriteIsEmpty()
   {
     return Container(
-      color: cnf.colorWhite.toColor(),
       width: double.infinity,
       height: MediaQuery.of(context).size.height,
       child: Center(
-        child: Image.asset("assets/images/favourite-empty.webp"),
+        child: Image.asset("assets/images/favourite-empty.png"),
       ),
     );
   }

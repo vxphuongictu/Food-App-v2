@@ -71,8 +71,8 @@ class _ResetPassword extends State<ResetPassword>
       builder: (context, value, child) {
         return BaseScreen(
             appbar: true,
+            appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
             extendBodyBehindAppBar: false,
-            appbarBgColor: cnf.colorWhite,
             screenBgColor: cnf.colorWhite,
             disabledBodyHeight: true,
             leading: IconButton(

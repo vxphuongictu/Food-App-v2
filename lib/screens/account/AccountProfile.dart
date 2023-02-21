@@ -55,7 +55,8 @@ class _AccountProfile extends State<AccountProfile>
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          disabledBodyHeight: true,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           extendBodyBehindAppBar: false,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -87,7 +88,9 @@ class _AccountProfile extends State<AccountProfile>
                 color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
               ),
               this.delete_account(),
-              const Expanded(child: SizedBox()),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.3,
+              ),
               this.input_form(),
               this.change_password(),
               this.submit_btn()

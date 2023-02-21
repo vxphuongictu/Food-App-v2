@@ -27,6 +27,9 @@ class _Settings extends State<Settings>
   /* functions */
   _changeMode(bool isOn) async {
     Provider.of<ThemeModeProvider>(context, listen: false).changeThemeMode(darkMode: isOn);
+    setState(() {
+      this._darkModeSwitch = !this._darkModeSwitch;
+    });
   }
 
   _changeEmailMarketing(bool isOn){
@@ -59,8 +62,8 @@ class _Settings extends State<Settings>
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           extendBodyBehindAppBar: false,
-          appbarBgColor: cnf.colorWhite,
           leading: IconButton(
             onPressed: () => Navigator.of(context).pop(),
             icon: Icon(

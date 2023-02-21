@@ -74,8 +74,9 @@ class _Register extends State<Register>
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
+          scroll: false,
           extendBodyBehindAppBar: false,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           screenBgColor: cnf.colorWhite,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
@@ -95,17 +96,22 @@ class _Register extends State<Register>
   {
     return Consumer<ThemeModeProvider>(
       builder: (context, value, child) {
-        return Padding(
-          padding: const EdgeInsets.only(top: 50.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MyTitle(
-                label: "REGISTER",
-                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
-              ),
-              Expanded(child: this.registerForm()),
-            ],
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 50.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(bottom: cnf.wcDistanceButtonAndText),
+                  child: MyTitle(
+                    label: "REGISTER",
+                    color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                  ),
+                ),
+                this.registerForm()
+              ],
+            ),
           ),
         );
       },

@@ -164,7 +164,7 @@ class _ProductBox extends State<ProductBox>
                   padding: EdgeInsets.only(top: this.spaceBetween, bottom: this.spaceBetween, right: this.spaceBetween, left: this.spaceBetween),
                   child: MyTitle(
                     align: TextAlign.center,
-                    maxLines: 2,
+                    maxLines: 1,
                     label: this.widget.title,
                     textOverflow: true,
                     fontFamily: "Poppins",

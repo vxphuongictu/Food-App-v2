@@ -43,7 +43,7 @@ class _OrderHistory extends State<OrderHistory>
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           screenBgColor: cnf.colorWhite,
           extendBodyBehindAppBar: false,
           disabledBodyHeight: true,

@@ -41,10 +41,9 @@ class _MyAddress extends State<MyAddress> {
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          screenBgColor: cnf.colorWhite,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           extendBodyBehindAppBar: false,
-          scroll: false,
+          scroll: true,
           leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: Icon(
@@ -69,15 +68,16 @@ class _MyAddress extends State<MyAddress> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: MyTitle(
-                  label: "MY ADDRESSES",
-                  color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
-                ),
+              MyTitle(
+                label: "MY ADDRESSES",
+                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
               ),
-              (this.address.isNotEmpty) ? this.screen() : Container(
-                  margin: const EdgeInsets.only(bottom: cnf.wcDistanceButtonAndText),
-                  child: Image.asset("assets/images/location.png")
+              (this.address.isNotEmpty) ? this.screen() : Expanded(
+                child: Container(
+                    width: double.infinity,
+                    margin: const EdgeInsets.only(bottom: cnf.wcDistanceButtonAndText),
+                    child: Image.asset("assets/images/location.png")
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: cnf.wcLogoMarginTop),
@@ -89,7 +89,7 @@ class _MyAddress extends State<MyAddress> {
                       )),
                   label: "ADD NEW ADDRESS",
                 ),
-              )
+              ),
             ],
           ),
         );

@@ -33,10 +33,12 @@ import 'provider/BasketProvider.dart';
 
 void main() async {
   await initHiveForFlutter();
-  runApp(ChangeNotifierProvider(
-    create: (_) => ThemeModel(),
-    child: foodApp(),
-  ));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then((value) {
+    runApp(ChangeNotifierProvider(
+      create: (_) => ThemeModel(),
+      child: foodApp(),
+    ));
+  });
 }
 
 

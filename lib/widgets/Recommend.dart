@@ -88,7 +88,7 @@ class _Recommend extends State<Recommend>
                     child: ItemBox(
                       productQuantity: 0,
                       productID: this.widget.products[index].id.toString(),
-                      boxWidth: MediaQuery.of(context).size.width / 2 - (cnf.marginScreen * 2),
+                      boxWidth: MediaQuery.of(context).size.width / 1.6 - (cnf.marginScreen * 2),
                       price: this.widget.products[index].price.toString(),
                       title: this.widget.products[index].title.toString(),
                       thumbnails: "${this.widget.products[index].thumbnail}",

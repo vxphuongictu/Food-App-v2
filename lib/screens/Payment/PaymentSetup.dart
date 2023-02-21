@@ -55,7 +55,8 @@ class _PaymentSetupState extends State<PaymentSetup> {
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          scroll: false,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           extendBodyBehindAppBar: false,
           screenBgColor: cnf.colorWhite,
           leading: IconButton(
@@ -78,20 +79,24 @@ class _PaymentSetupState extends State<PaymentSetup> {
       builder: (context, value, child) {
         return Padding(
           padding: const EdgeInsets.only(top: 50.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              MyTitle(
-                label: (this.widget.title == null) ? "PAYMENT SETUP" : this.widget.title!,
-                color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
-              ),
-              AnimatedScale(
-                scale: this._scale,
-                duration: const Duration(milliseconds: 500),
-                child: Image.asset("assets/images/payment.png"),
-              ),
-              this.formInput(context),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                MyTitle(
+                  label: (this.widget.title == null) ? "PAYMENT SETUP" : this.widget.title!,
+                  color: (value.darkmode == true) ? cnf.colorWhite : cnf.colorBlack,
+                ),
+                AnimatedScale(
+                  scale: this._scale,
+                  duration: const Duration(milliseconds: 500),
+                  child: Container(
+                    child: Image.asset("assets/images/payment.png"),
+                  ),
+                ),
+                this.formInput(context),
+              ],
+            ),
           ),
         );
       },

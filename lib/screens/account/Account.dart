@@ -33,13 +33,17 @@ class _Account extends State<Account>
 
   @override
   Widget build(BuildContext context) {
-    return BaseScreen(
-      screenBgColor: cnf.colorWhite,
-      extendBodyBehindAppBar: false,
-      disabledBodyHeight: true,
-      appbar: false,
-      margin: true,
-      body: _screen(),
+    return Consumer<ThemeModeProvider>(
+      builder: (context, value, child) {
+        return BaseScreen(
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
+          extendBodyBehindAppBar: false,
+          disabledBodyHeight: true,
+          appbar: false,
+          margin: true,
+          body: _screen(),
+        );
+      },
     );
   }
 

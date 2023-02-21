@@ -15,7 +15,11 @@ class ThemeModeProvider with ChangeNotifier
   }
 
   void getThemeMode() async {
-    _isDarkMode = await SharedPreferencesClass().get_dark_mode_options();
+    try {
+      _isDarkMode = await SharedPreferencesClass().get_dark_mode_options();
+    } catch (e) {
+      _isDarkMode = false;
+    }
     notifyListeners();
   }
 }

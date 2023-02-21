@@ -63,7 +63,7 @@ class _SearchHandle extends State<SearchHandle>
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 200,
-              childAspectRatio: 4 / 6,
+              childAspectRatio: 4 / 6.8,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15
           ),

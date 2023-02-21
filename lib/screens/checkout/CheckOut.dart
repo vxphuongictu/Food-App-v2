@@ -56,7 +56,7 @@ class _CheckOut extends State<CheckOut> {
       builder: (context, value, child) {
         return BaseScreen(
           appbar: true,
-          appbarBgColor: cnf.colorWhite,
+          appbarBgColor: (value.darkmode == true) ? cnf.darkModeColorbg.toColor() : Colors.white,
           screenBgColor: cnf.colorWhite,
           extendBodyBehindAppBar: false,
           leading: IconButton(
